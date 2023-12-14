@@ -62,10 +62,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 ///////////////////// display movments
-const displayMovments = function (movements) {
+const displayMovments = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  const moves = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  // console.log(moves);
+
+  moves.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -124,7 +127,6 @@ creatUserName(accounts);
 
 //update UI
 const updateUI = function (acc) {
-  console.log('updating');
   //display movments
   displayMovments(acc.movements);
   //display balance
@@ -233,10 +235,19 @@ btnClose.addEventListener('click', function (e) {
   containerApp.style.opacity = 0;
 });
 
-// const arr = ['yo', 'drod', 'salam'];
-// arr.splice(1, 1);
-// console.log(arr);
-// console.log(arr.findIndex(item => item === 'salam'));
+// --- btn sort ---
+
+let sorted = false;
+btnSort.addEventListener('click', function () {
+  displayMovments(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+const overalBalance = accounts
+  .map(arr => arr.movements)
+  .flat()
+  .reduce((acu, mov) => acu + mov, 0);
+console.log(`overal balance: ${overalBalance}`);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -320,3 +331,8 @@ btnClose.addEventListener('click', function (e) {
 //   account.owner === 'Jessica Davis' ? (result = account) : -1;
 // }
 // console.log(result);
+
+// const arr = ['yo', 'drod', 'salam'];
+// arr.splice(1, 1);
+// console.log(arr);
+// console.log(arr.findIndex(item => item === 'salam'));
